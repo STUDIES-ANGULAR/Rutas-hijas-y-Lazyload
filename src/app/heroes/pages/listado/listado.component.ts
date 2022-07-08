@@ -13,7 +13,7 @@ import { Heroe } from '../../interfaces/heroes.interfaces';
 })
 export class ListadoComponent implements OnInit {
 
-  heroes: Heroe [] = [];
+    heroes: Heroe [] = [];
   
   constructor(private heroesService: HeroesService) { }
 
