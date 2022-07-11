@@ -37,7 +37,6 @@ export class HeroeComponent implements OnInit {
       //me subscribo al evento del switchMap y capturo el heroe del service
       .subscribe(heroe => {
         this.heroe = heroe;
-        console.log(heroe)
       });
   }
 
