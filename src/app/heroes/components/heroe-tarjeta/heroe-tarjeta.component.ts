@@ -1,9 +1,15 @@
+import { style } from '@angular/animations';
 import { Component, Input } from '@angular/core';
 import { Heroe } from '../../interfaces/heroes.interfaces';
 
 @Component({
   selector: 'app-heroe-tarjeta',
-  templateUrl: './heroe-tarjeta.component.html'
+  templateUrl: './heroe-tarjeta.component.html',
+  styles: [`
+    mat-card{
+      margin-top: 20px;
+    }
+  `]
 })
 export class HeroeTarjetaComponent {
 
@@ -11,3 +17,4 @@ export class HeroeTarjetaComponent {
   @Input() heroe!: Heroe;
  
 }
+ 
