@@ -24,8 +24,8 @@ export class BuscarComponent implements OnInit {
       this.heroesService.getSugerencias(this.termino.trim())  
         .subscribe(heroes => {
           this.heroes = heroes;
-          if(heroes.length>0){
-            this.noHayHeroes = false;
+          if(heroes.length>0 || this.termino.trim().length < 1){
+            this.noHayHeroes = false; 
           }else{
             this.noHayHeroes = true;
           }
