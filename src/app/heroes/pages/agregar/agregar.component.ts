@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { switchMap } from 'rxjs/operators'
 
 import { Heroe, Publisher } from '../../interfaces/heroes.interfaces';
 import { HeroesService } from '../../services/heroes.service';
+import { ConfirmarComponent } from '../../components/confirmar/confirmar.component';
 
 @Component({
   selector: 'app-agregar',
@@ -40,7 +43,9 @@ export class AgregarComponent implements OnInit {
 
   constructor( private heroesService:  HeroesService,
                private activatedRoute: ActivatedRoute, 
-               private router:         Router) { }
+               private router:         Router,
+               private snackBar: MatSnackBar,
+               public dialog: MatDialog ) { }
 
   ngOnInit(): void {
 
@@ -62,20 +67,75 @@ export class AgregarComponent implements OnInit {
       
       if(this.heroe.id){
         this.heroesService.actualizarHeroe(this.heroe)
-        .subscribe(console.log);
+        .subscribe( heroe => this.mostrarSnackbar('Registro actualizado'));
       }else{
         this.heroesService.agregarHeroe(this.heroe)
           .subscribe(heroe => {
             this.router.navigate(['/heroes/editar', heroe.id]);
+             this.mostrarSnackbar('Registro creado');
           })
       }
   }
 
-  eliminarHeroe(){
-    this.heroesService.eliminarHeroe(this.heroe.id!)
-      .subscribe(resp => {
-        this.router.navigate(['/heroes']);
-      })
+  eliminarHeroe2(){
+   const dialog = this.dialog.open( ConfirmarComponent, {
+      width: '250px',
+      data: {...this.heroe} //evitamos que sea modificado {... object}
+    });
+    dialog.afterClosed().subscribe(
+      (result) => {
+        if(result){
+            this.heroesService.eliminarHeroe(this.heroe.id!)
+              .subscribe(resp => {
+                this.router.navigate(['/heroes']);
+              });
+        }
+      }
+    )
   }
 
+  eliminarHeroe() {
+    const dialog = this.dialog.open(ConfirmarComponent, {
+      width: '250px',
+      data: { ...this.heroe } //evitamos que sea modificado {... object}
+    });
+
+    dialog.afterClosed()
+      .pipe(
+        // console.log(result)
+        switchMap(({ result }) => result ? this.heroesService.eliminarHeroe(this.heroe.id!): '')
+      )
+      .subscribe(ok => {
+        if(ok){
+          this.router.navigate(['/heroes']);
+        }
+      })
+  }
+    
+
+  // eliminarHeroe() {
+  //   const dialog = this.dialog.open(ConfirmarComponent, {
+  //     width: '250px',
+  //     data: { ...this.heroe } //evitamos que sea modificado {... object}
+  //   });
+
+  //   dialog.afterClosed()
+  //     .pipe(
+  //       // console.log(result)
+  //       switchMap(({ result }) => this.heroesService.eliminarHeroe(this.heroe.id!))
+  //     )
+  //     .subscribe(ok => {
+  //       if(ok){
+  //         this.router.navigate(['/heroes']);
+  //       }
+  //     })
+  // }
+    
+
+ mostrarSnackbar ( mensaje: string){
+
+  this.snackBar.open(mensaje, 'ok!', {
+    duration: 2500
+  })
+ }
 }
