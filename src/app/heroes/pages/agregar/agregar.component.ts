@@ -77,7 +77,7 @@ export class AgregarComponent implements OnInit {
       }
   }
 
-  eliminarHeroe2(){
+  eliminarHeroe(){
    const dialog = this.dialog.open( ConfirmarComponent, {
       width: '250px',
       data: {...this.heroe} //evitamos que sea modificado {... object}
@@ -94,23 +94,25 @@ export class AgregarComponent implements OnInit {
     )
   }
 
-  eliminarHeroe() {
-    const dialog = this.dialog.open(ConfirmarComponent, {
-      width: '250px',
-      data: { ...this.heroe } //evitamos que sea modificado {... object}
-    });
 
-    dialog.afterClosed()
-      .pipe(
-        // console.log(result)
-        switchMap(({ result }) => result ? this.heroesService.eliminarHeroe(this.heroe.id!): '')
-      )
-      .subscribe(ok => {
-        if(ok){
-          this.router.navigate(['/heroes']);
-        }
-      })
-  }
+// INTENTO CON SWITCHMAP
+  // eliminarHeroe() { 
+  //   const dialog = this.dialog.open(ConfirmarComponent, {
+  //     width: '250px',
+  //     data: { ...this.heroe } //evitamos que sea modificado {... object}
+  //   });
+
+  //   dialog.afterClosed()
+  //     .pipe(
+  //       // console.log(result)
+  //       switchMap(({ result }) => result ? this.heroesService.eliminarHeroe(this.heroe.id!): '')
+  //     )
+  //     .subscribe(ok => {
+  //       if(ok){
+  //         this.router.navigate(['/heroes']);
+  //       }
+  //     })
+  // }
     
 
   // eliminarHeroe() {
