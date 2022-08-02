@@ -25,4 +25,6 @@ export class AuthService {
             tap(usuarioAuth => this._usuarioLogeado = usuarioAuth)
           );
   }
+
+  
 }
