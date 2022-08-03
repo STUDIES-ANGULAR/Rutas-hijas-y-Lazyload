@@ -22,9 +22,15 @@ export class AuthService {
   login() {
     return this.http.get<UsuarioAuth>( `${ this.baseUrl }/usuarios/1` )
           .pipe(
-            tap(usuarioAuth => this._usuarioLogeado = usuarioAuth)
+            tap(usuarioAuth => {
+              this._usuarioLogeado = usuarioAuth;
+              localStorage.setItem('id', usuarioAuth.id);
+            })
           );
   }
 
+  logout() {
+    this._usuarioLogeado = undefined;
+  }
   
 }
